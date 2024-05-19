@@ -9,11 +9,17 @@ from .serializer import DepartmentSerializer,DesignationSerializer
 
 from django.core.cache import cache
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
 class SuperAdminLogin(APIView):
     ...
 
 
 class DepartmentList(generics.ListAPIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
@@ -30,6 +36,9 @@ class DepartmentList(generics.ListAPIView):
         return Response(data)
 
 class DesignationList(generics.ListAPIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
 
@@ -46,6 +55,9 @@ class DesignationList(generics.ListAPIView):
         return Response(data)
 
 class AddDepartment(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
     def post(self, request):
         name = request.data.get('name')
         if not name:
@@ -64,6 +76,10 @@ class AddDepartment(APIView):
             return Response({'error': str(e)}, status=500)
 
 class AddDesignation(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
+    
     def post(self, request):
         name = request.data.get('name')
         priority = request.data.get('priority')
@@ -81,3 +97,44 @@ class AddDesignation(APIView):
             return Response({'message': f'{name} Designation Created'}, status=201)
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+class UpdateDepartment(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
+    def put(self, request, pk, format=None):
+        department = Department.objects.get(pk=pk)
+        serializer = DepartmentSerializer(department, data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        serializer.save()
+        return Response(serializer.data)
+    
+    def delete(self, request, pk, format=None):
+        try:
+            department = Department.objects.get(pk=pk)
+            department.delete()
+            return Response("Department Deleted")
+        except Department.DoesNotExist:
+            return Response('Department Not Found this Name')
+        
+
+class UpdateDesignation(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    
+    def put(self, request, pk, format=None):
+        designation = Designation.objects.get(pk=pk)
+        serializer = DesignationSerializer(designation, data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        serializer.save()
+        return Response(serializer.data)
+    
+    def delete(self, request, pk, format=None):
+        try:
+            designation = Designation.objects.get(pk=pk)
+            designation.delete()
+            return Response("Designation Deleted")
+        except Designation.DoesNotExist:
+            return Response('Designation Not Found this Name')

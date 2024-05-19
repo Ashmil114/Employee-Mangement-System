@@ -4,9 +4,9 @@ from .models import Department,Designation
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ('name','created')
+        fields = '__all__'
 
 class DesignationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Designation
-        fields = ('name','priority')
+        fields = '__all__'
