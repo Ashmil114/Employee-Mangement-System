@@ -17,7 +17,8 @@ class WorkerList(generics.ListAPIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
     
-    queryset = Worker.objects.all()
+    # queryset = Worker.objects.all()
+    queryset = Worker.objects.select_related('department','designation').all()
     serializer_class = WorkerSerializer
 
     def list(self, request):

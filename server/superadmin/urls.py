@@ -1,14 +1,21 @@
 from django.urls import path,include
 from django.http import HttpResponse
+
+from rest_framework.authtoken import views
+
+
 from .views import AddDepartment,AddDesignation,DepartmentList,DesignationList,UpdateDepartment,UpdateDesignation
 from superadmin.view.worker_views import AddWorker,WorkerList,ViewUpdateWorker
-from superadmin.view.task_views import TaskList
+from superadmin.view.task_views import TaskList,AddTask
 
 def Home(request):
     return HttpResponse("SuperAdmin")
 
 urlpatterns = [
     path('',Home),
+    path('superadmin-login/', views.obtain_auth_token),                                             # [POST] username(email),password
+    
+    #DEPARTMENT AND DESIGNATION ROUTES
     path('department-list/',DepartmentList.as_view(),name='department-list'),                       # [GET]
     path('designation-list/',DesignationList.as_view(),name='designation-list'),                    # [GET]
     path('add-department/',AddDepartment.as_view(),name='add-department'),                          # [POST] name
@@ -25,5 +32,7 @@ urlpatterns = [
     
     # TASK ROUTES
     path('task-list/',TaskList.as_view(),name='task-list'),                                         # [GET]
+    path('add-task/',AddTask.as_view(),name='add-task'),                                            # [POST] user_id(assigned to),title,deadline(2024-10-30),status(pending,completed,overdue),token(who assigned by a task)
+    
     
 ]
