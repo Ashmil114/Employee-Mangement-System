@@ -24,8 +24,8 @@ The Employee Management System (EMS) is a web-based application designed to stre
 ### Backend Setup
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/employee-management-system.git
-    cd employee-management-system
+    git clone https://github.com/Ashmil114/Employee-Mangement-System.git
+    cd Employee-Mangement-System
     ```
 
 2. Create a virtual environment and activate it:
@@ -35,9 +35,7 @@ The Employee Management System (EMS) is a web-based application designed to stre
     ```
 
 3. Install the required packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
+    
 
 4. Set up the PostgreSQL database and update the `DATABASES` setting in `settings.py`.
 
